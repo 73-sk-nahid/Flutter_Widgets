@@ -1,0 +1,25 @@
+class _Widget001State extends State<MyHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+        child: Text('Show About Dialog'),
+        onPressed: () {
+          showDialog(context: context,
+              builder: (context) => const AboutDialog(
+                applicationIcon: FlutterLogo(),
+                applicationLegalese: 'Legalese',
+                applicationName: 'Flutter App',
+                applicationVersion: 'Version 1.0.0',
+                children: [
+                  Text('This is a text created by Sk Tech'),
+                ],
+              ),
+          );
+        },
+      ),
+    );
+  }
+
+
+}
