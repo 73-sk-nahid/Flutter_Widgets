@@ -12,91 +12,113 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    const appTitle = 'Flutter Form Demo';
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      title: appTitle,
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text(appTitle),
+        ),
+        body: const MyCustomForm(),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class MyCustomForm extends StatefulWidget {
+  const MyCustomForm({super.key});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
 
   @override
-  State<MyHomePage> createState() => _Widget001State();
+  MyCustomFormState createState(){
+    return MyCustomFormState();
+  }
 }
 
-class _Widget001State extends State<MyHomePage>{
-  bool _bool = true;
+class MyCustomFormState extends State<MyCustomForm> {
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const SizedBox(
-          width: double.infinity,
-          height: 100,
-        ),
-        TextButton(
-          onPressed: () {
-            setState(() {
-              _bool = !_bool;
-            });
-          },
-          child: const Text(
-            'Switch',
-            style: TextStyle(
-              color: Colors.white,
+    return Form(
+    key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFormField(
+            decoration: const InputDecoration(
+              icon: Icon(Icons.person),
+              hintText: 'Enter your full name',
+              labelText: 'Name',
             ),
+            validator: (value) {
+              if(value!.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
           ),
-        ),
-        AnimatedCrossFade(
-          firstChild: Image.asset(
-            'assets/kitty.jpg',
-            width: double.infinity,
-            height: 250,
+          TextFormField(
+            decoration: const InputDecoration(
+              icon: Icon(Icons.call),
+              hintText: 'Enter your phone no',
+              labelText: 'Phone',
+            ),
+            validator: (value) {
+              if(value!.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
           ),
-          secondChild: Image.asset(
-            'assets/kitties.jpg',
-            width: double.infinity,
-            height: 250,
+          TextFormField(
+            decoration: const InputDecoration(
+              icon: Icon(Icons.calendar_month),
+              hintText: 'Enter your date of birth',
+              labelText: 'DOB',
+            ),
+            validator: (value) {
+              if(value!.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
           ),
-          crossFadeState:
-              _bool ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-          duration: const Duration(seconds: 1),
-        ),
-      ],
+          Container(
+            padding: const EdgeInsets.only(
+                left: 150.0,
+                top: 40.0,
+            ),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled))
+                        return Colors.blue;
+                      return null; // Defer to the widget's default.
+                    }),
+                foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled))
+                        return Colors.black;
+                      return null; // Defer to the widget's default.
+                    }),
+              ),
+              onPressed: () {
+                if(_formKey.currentState!.validate()) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(
+                    const SnackBar(content: Text('Data is in processing...'))
+                  );
+                }
+              },
+              child: const Text('Submit'),
+            )
+          ),
+        ],
+      ),
     );
   }
 }
+
