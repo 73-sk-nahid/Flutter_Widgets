@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:flutterwidgets/firstScreen.dart';
+import 'package:flutterwidgets/secondScreen.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -19,8 +22,16 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: const Text(appTitle),
+          bottom: TabBar(tabs: [
+            Tab(icon: Icon(Icons.contacts), text: "Tab 1"),
+            Tab(icon: Icon(Icons.camera_alt), text: "Tab 2")
+          ]),
         ),
-        body: const MyCustomForm(),
+        body: TabBarView(children: [
+          FirstScreen(),
+          SecondScreen(),
+        ]),
+        //body: const MyCustomForm(),
       ),
     );
   }
@@ -29,9 +40,8 @@ class MyApp extends StatelessWidget {
 class MyCustomForm extends StatefulWidget {
   const MyCustomForm({super.key});
 
-
   @override
-  MyCustomFormState createState(){
+  MyCustomFormState createState() {
     return MyCustomFormState();
   }
 }
@@ -42,7 +52,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-    key: _formKey,
+      key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -53,7 +63,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               labelText: 'Name',
             ),
             validator: (value) {
-              if(value!.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter some text';
               }
               return null;
@@ -66,7 +76,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               labelText: 'Phone',
             ),
             validator: (value) {
-              if(value!.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter some text';
               }
               return null;
@@ -79,46 +89,42 @@ class MyCustomFormState extends State<MyCustomForm> {
               labelText: 'DOB',
             ),
             validator: (value) {
-              if(value!.isEmpty) {
+              if (value!.isEmpty) {
                 return 'Please enter some text';
               }
               return null;
             },
           ),
           Container(
-            padding: const EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 left: 150.0,
                 top: 40.0,
-            ),
-            child: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.disabled))
-                        return Colors.blue;
-                      return null; // Defer to the widget's default.
-                    }),
-                foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.disabled))
-                        return Colors.black;
-                      return null; // Defer to the widget's default.
-                    }),
               ),
-              onPressed: () {
-                if(_formKey.currentState!.validate()) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(
-                    const SnackBar(content: Text('Data is in processing...'))
-                  );
-                }
-              },
-              child: const Text('Submit'),
-            )
-          ),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.disabled))
+                      return Colors.blue;
+                    return null; // Defer to the widget's default.
+                  }),
+                  foregroundColor: MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.disabled))
+                      return Colors.black;
+                    return null; // Defer to the widget's default.
+                  }),
+                ),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Data is in processing...')));
+                  }
+                },
+                child: const Text('Submit'),
+              )),
         ],
       ),
     );
   }
 }
-
